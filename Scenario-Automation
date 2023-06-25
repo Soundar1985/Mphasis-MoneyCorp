@@ -1,0 +1,52 @@
+import org.openqa.selenium.By;  
+import org.openqa.selenium.JavascriptExecutor;  
+import org.openqa.selenium.WebDriver;  
+import org.openqa.selenium.chrome.ChromeDriver;  
+  
+public class MoneyCopr {  
+  
+    public static void main(String[] args) {  
+              System.setProperty("webdriver.chrome.driver", "D:\\ChromeDriver\\chromedriver.exe");  
+               WebDriver driver=new ChromeDriver();  
+               driver.navigate().to("https://www.moneycorp.com/en-gb/");  
+              	driver.manage().window().maximize();
+              //Verifying the title of the page 
+              String actualTitle = driver.getTitle();	
+              	String expectedTitle = "moneycorp";
+              	Assert.assertEquals("Condition true", actualTitle, expectedTitle);
+
+              //Change to US- English
+              	driver.FindElement(By.id(“language-dropdown-flag”)).Click();
+              	driver.FindElement(By.Xpath(“//*[@id="nav-languages-overlay"]/div[2]/ul/li[9]/a”)).Click();
+
+              //Verifying the URL with EN-US
+              	string url = driver.getCurrentUrl();
+              	string expectedUrl = “https://www.moneycorp.com/en-us/”;
+              	Assert.assertEquals(“Condition true”, url,expectedUrl);
+
+              //Navigating to Foreign exchange solution page
+              	driver.FindElement(By.Xpath(“/html/body/section/div[2]/div[5]/section/div/article[1]/div/a/span”)).Click();
+              String expectedText = " Foreign exchange solutions for your business";
+              	if ( driver.getPageSource().contains("Foreign exchange solutions for your business")){
+                       System.out.println("Text: " + expectedText + " is present. ");
+                    } else {
+                       System.out.println("Text: " + expectedText + " is not present. "); }
+                    WebElement searchText = driver.FindElement(By.id(“nav_search”));
+
+              //Search Text
+                    searchText.SendKeys(“international payment”);
+                   searchText.submit();
+
+              //verifying the article with EN-US
+              List<WebElement> linkList = driver.findElement(By.Class(“title u-m-b2”));
+              for(int i=0 ; i<linkList.size() ; i++)
+              {
+                  if(linkList.get(i).getAttribute("href").contains("en-us"))
+                  {
+                      linkList.get(i).click();
+                      break; 
+                  }
+              }
+              driver.Close();
+            }
+}
